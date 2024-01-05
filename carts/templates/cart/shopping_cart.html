@@ -1,0 +1,60 @@
+
+
+{% block content %}
+    <h2>سبد خرید</h2>
+    <ul>
+        {% for airfare_cart in airfare_in_cart %}
+            <li>
+                {{ airfare_cart.airfare.origin }} به {{ airfare_cart.airfare.destination }}
+                <p>price : {{ airfare_cart.airfare.price }}</p>
+                <p>date : {{ airfare_cart.airfare.date }}</p>
+                <button class="remove-from-cart" data-airfare-id="{{ airfare_cart.airfare.id }}">حذف</button>
+            </li>
+        {% endfor %}
+
+    </ul>
+    <button id="finalize-cart">نهایی کردن سبد خرید</button>
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.remove-from-cart').click(function() {
+            var airfareId = $(this).data('airfare-id');
+            $.ajax({
+                type: 'POST',
+                url: '/cart/remove-book/',
+                data: {
+                    'airfare_id': airfareId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert('کتاب از سبد خرید حذف شد!');
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert('خطا در ارسال درخواست: ' + error);
+                }
+            });
+
+        });
+
+        $('#finalize-cart').click(function() {
+            $.ajax({
+                type: 'POST',
+                url: '/finalize-cart/',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    // انجام عملیاتی که بعد از نهایی کردن سبد خرید باید انجام شود
+                    alert('سبد خرید نهایی شد و سفارش ایجاد شد!');
+                },
+                error: function(xhr, status, error) {
+                    // پیام خطا در صورتی که درخواست با مشکل مواجه شود
+                    alert('خطا در ارسال درخواست: ' + error);
+                }
+            });
+        });
+    });
+</script>

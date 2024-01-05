@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flight List</title>
+  </head>
+  <body>
+    {% for flight in flights %}
+    <ul>
+      <li>
+        <a href="/flights/{{ flight.pk }}/"
+          >{{ flight.flight_number }} - {{ flight.departure_airport.name }} to
+          {{ flight.arrival_airport.name }} - {{ flight.price }}</a
+        >
+      </li>
+    </ul>
+    <button class="add-to-cart" data-flight-id="{{ flight.id }}">
+      افزودن به سبد خرید
+    </button>
+    {% endfor %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".add-to-cart").click(function () {
+          var flightId = $(this).data("flight-id");
+          $.ajax({
+            type: "POST",
+            url: "/cart/add-to-cart/",
+            data: {
+              flight_id: flightId,
+              csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function (response) {
+              alert("پرواز به سبد خرید اضافه شد!");
+            },
+            error: function (xhr, status, error) {
+              alert("خطا در ارسال درخواست: " + error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

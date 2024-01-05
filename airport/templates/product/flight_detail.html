@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ flight.flight_number }} Details</title>
+  </head>
+  <body>
+    <h1>{{ flight.flight_number }}</h1>
+    <h3>Departure Airport: {{ flight.departure_airport.name }}</h3>
+    <h3>Arrival Airport: {{ flight.arrival_airport.name }}</h3>
+    <h3>Departure Time: {{ flight.departure_time }}</h3>
+    <h3>Arrival Time: {{ flight.arrival_time }}</h3>
+    <h2>Price: {{ flight.price }}</h2>
+
+    <!-- You can add more details as needed -->
+  </body>
+</html>
